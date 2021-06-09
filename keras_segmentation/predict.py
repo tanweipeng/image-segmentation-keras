@@ -10,7 +10,7 @@ from tqdm import tqdm
 from time import time
 
 from .train import find_latest_checkpoint
-from .data_utils.data_loader import get_image_array, get_segmentation_array,\
+from .data_utils.data_loader import ReadImageType, get_image_array, get_segmentation_array,\
     DATA_LOADER_SEED, class_colors, get_pairs_from_paths
 from .models.config import IMAGE_ORDERING
 
@@ -133,7 +133,7 @@ def predict(model=None, inp=None, out_fname=None,
             checkpoints_path=None, overlay_img=False,
             class_names=None, show_legends=False, colors=class_colors,
             prediction_width=None, prediction_height=None,
-            read_image_type=1):
+            read_image_type:ReadImageType = ReadImageType.IMREAD_COLOR):
 
     if model is None and (checkpoints_path is not None):
         model = model_from_checkpoint_path(checkpoints_path)
@@ -144,8 +144,6 @@ def predict(model=None, inp=None, out_fname=None,
 
     if isinstance(inp, six.string_types):
         inp = cv2.imread(inp, read_image_type)
-
-    assert (len(inp.shape) == 3 or len(inp.shape) == 1 or len(inp.shape) == 4), "Image should be h,w,3 "
 
     output_width = model.output_width
     output_height = model.output_height
@@ -174,7 +172,7 @@ def predict(model=None, inp=None, out_fname=None,
 def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None,
                      checkpoints_path=None, overlay_img=False,
                      class_names=None, show_legends=False, colors=class_colors,
-                     prediction_width=None, prediction_height=None, read_image_type=1):
+                     prediction_width=None, prediction_height=None, read_image_type:ReadImageType = ReadImageType.IMREAD_COLOR):
 
     if model is None and (checkpoints_path is not None):
         model = model_from_checkpoint_path(checkpoints_path)
@@ -265,7 +263,7 @@ def predict_video(model=None, inp=None, output=None,
 
 
 def evaluate(model=None, inp_images=None, annotations=None,
-             inp_images_dir=None, annotations_dir=None, checkpoints_path=None, read_image_type=1):
+             inp_images_dir=None, annotations_dir=None, checkpoints_path=None, read_image_type:ReadImageType = ReadImageType.IMREAD_COLOR):
 
     if model is None:
         assert (checkpoints_path is not None),\

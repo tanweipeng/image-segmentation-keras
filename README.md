@@ -367,7 +367,9 @@ model.train(
     train_images =  "dataset1/images_prepped_train/",
     train_annotations = "dataset1/annotations_prepped_train/",
     checkpoints_path = "/tmp/vgg_unet_1" , epochs=5, 
-    read_image_type=0  # Sets how opencv will read the images
+    read_image_type=ReadImageType  
+                       # Use enum
+                       # Sets how opencv will read the images
                        # cv2.IMREAD_COLOR = 1 (rgb),
                        # cv2.IMREAD_GRAYSCALE = 0,
                        # cv2.IMREAD_UNCHANGED = -1 (4 channels like RGBA)

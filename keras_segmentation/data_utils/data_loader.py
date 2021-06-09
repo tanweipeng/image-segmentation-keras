@@ -4,6 +4,7 @@ import random
 import six
 import numpy as np
 import cv2
+import enum
 
 try:
     from collections.abc import Sequence
@@ -36,7 +37,10 @@ ACCEPTABLE_SEGMENTATION_FORMATS = [".png", ".bmp"]
 class DataLoaderError(Exception):
     pass
 
-
+class ReadImageType(enum.Enum):
+    IMREAD_COLOR = 1,
+    IMREAD_GRAYSCALE = 2,
+    IMREAD_UNCHANGED = -1
 
 def get_image_list_from_path(images_path ):
     image_files = []
@@ -131,7 +135,7 @@ def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False, othe
 
 def get_image_array(image_input,
                     width, height,
-                    imgNorm="sub_mean", ordering='channels_first', read_image_type=1):
+                    imgNorm="sub_mean", ordering='channels_first', read_image_type:ReadImageType = ReadImageType.IMREAD_COLOR):
     """ Load image array from input """
 
     if type(image_input) is np.ndarray:
@@ -170,7 +174,7 @@ def get_image_array(image_input,
 
 
 def get_segmentation_array(image_input, nClasses,
-                           width, height, no_reshape=False, read_image_type=1):
+                           width, height, no_reshape=False, read_image_type:ReadImageType = ReadImageType.IMREAD_COLOR):
     """ Load segmentation array from input """
 
     seg_labels = np.zeros((height, width, nClasses))
@@ -249,7 +253,7 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
                                  augmentation_name="aug_all",
                                  custom_augmentation=None,
                                  other_inputs_paths=None, preprocessing=None,
-                                 read_image_type=cv2.IMREAD_COLOR , ignore_segs=False ):
+                                 read_image_type:ReadImageType = ReadImageType.IMREAD_COLOR, ignore_segs=False ):
     
 
     if not ignore_segs:

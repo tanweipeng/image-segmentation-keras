@@ -1,7 +1,7 @@
 import json
 import os
 
-from .data_utils.data_loader import image_segmentation_generator, \
+from .data_utils.data_loader import ReadImageType, image_segmentation_generator, \
     verify_segmentation_dataset
 import six
 from keras.callbacks import Callback
@@ -84,7 +84,9 @@ def train(model,
           custom_augmentation=None,
           other_inputs_paths=None,
           preprocessing=None,
-          read_image_type=1  # cv2.IMREAD_COLOR = 1 (rgb),
+          read_image_type:ReadImageType = ReadImageType.IMREAD_COLOR
+                             # Use enum  
+                             # cv2.IMREAD_COLOR = 1 (rgb),
                              # cv2.IMREAD_GRAYSCALE = 0,
                              # cv2.IMREAD_UNCHANGED = -1 (4 channels like RGBA)
          ):
